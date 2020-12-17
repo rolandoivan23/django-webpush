@@ -13,11 +13,11 @@ def send_notification_to_user(user, payload, ttl=0):
         _send_notification(push_info.subscription, payload, ttl)
 
 
-def send_notification_to_group(group_name, payload, ttl=0):
+def send_notification_to_group(group_name, payload, db_connection = 'default', ttl=0):
     from .models import Group
     # Get all the subscription related to the group
 
-    push_infos = Group.objects.get(name=group_name).webpush_info.select_related("subscription")
+    push_infos = Group.objects.using(db_connection).get(name=group_name).webpush_info.select_related("subscription")
     for push_info in push_infos:
         _send_notification(push_info.subscription, payload, ttl)
 
