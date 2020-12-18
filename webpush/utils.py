@@ -19,7 +19,7 @@ def send_notification_to_group(group_name, payload, db_connection = 'default', t
     # Get all the subscription related to the group
 
     group = Group.objects.using(db_connection).prefetch_related(Prefetch('webpush_info', queryset = PushInformation.objects.using(db_connection).all().select_related('subscription') )).get(name=group_name)
-    push_infos = group.webpush_info
+    push_infos = group.webpush_info.all()
 
     for push_info in push_infos:
         _send_notification(push_info.subscription, payload, ttl)
