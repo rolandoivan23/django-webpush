@@ -1,0 +1,4 @@
+include LICENSE
+include README.rst
+recursive-include webpush/static *
+recursive-include webpush/templates *
