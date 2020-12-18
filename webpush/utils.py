@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.urls import reverse
+from django.db.models import Prefetch
 
 from pywebpush import WebPushException, webpush
 
@@ -17,7 +18,9 @@ def send_notification_to_group(group_name, payload, db_connection = 'default', t
     from .models import Group
     # Get all the subscription related to the group
 
-    push_infos = Group.objects.using(db_connection).get(name=group_name).webpush_info.select_related("subscription")
+    group = Group.objects.using(db_connection).prefetch_related(Prefetch('webpush_info', queryset = PushInformation.objects.using(db_connection).all().select_related('subscription') )).get(name=group_name)
+    push_infos = group.webpush_info
+    
     for push_info in push_infos:
         _send_notification(push_info.subscription, payload, ttl)
 
