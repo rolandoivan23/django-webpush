@@ -22,14 +22,14 @@ def send_notification_to_group(group_name, payload, db_connection = 'default', t
     push_infos = group.webpush_info.all()
 
     for push_info in push_infos:
-        _send_notification(push_info.subscription, payload, ttl)
+        _send_notification(push_info.subscription, payload, ttl, db_connection)
 
 
-def send_to_subscription(subscription, payload, ttl=0):
-    return _send_notification(subscription, payload, ttl)
+def send_to_subscription(subscription, payload, ttl=0, db_connection = 'default'):
+    return _send_notification(subscription, payload, ttl, db_connection)
 
 
-def _send_notification(subscription, payload, ttl):
+def _send_notification(subscription, payload, ttl, db_connection = 'default'):
     subscription_data = _process_subscription_info(subscription)
     vapid_data = {}
 
@@ -51,7 +51,7 @@ def _send_notification(subscription, payload, ttl):
     except WebPushException as e:
         # If the subscription is expired, delete it.
         if e.response.status_code == 410:
-            subscription.delete()
+            subscription.delete(using = db_connection)
         else:
             # Its other type of exception!
             raise e
