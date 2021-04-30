@@ -34,9 +34,9 @@ def save_info(request):
             # Save the subscription info with subscription data
             # as the subscription data is a dictionary and its valid
             subscription = subscription_form.get_or_save()
-            web_push_form.save_or_delete(
+            web_push_form.save_or_delete(type(request.user),
                 subscription=subscription, user=request.user.pk,
-                status_type=status_type, group_name=group_name, type(request.user))
+                status_type=status_type, group_name=group_name)
 
             # If subscribe is made, means object is created. So return 201
             if status_type == 'subscribe':
