@@ -10,12 +10,11 @@ class WebPushForm(forms.Form):
                                       ('unsubscribe', 'unsubscribe')
                                     ])
 
-    def save_or_delete(self, AccountModel, subscription, user, status_type, group_name):
+    def save_or_delete(self, user_obj, subscription, user, status_type, group_name):
         data = {}
 
-        user = AccountModel.objects.get(pk = user)
-        if user.is_authenticated:
-            data["user"] = user
+        if user_obj.is_authenticated:
+            data["user"] = user_obj
 
         if group_name:
             group, created = Group.objects.get_or_create(name=group_name)

@@ -34,7 +34,7 @@ def save_info(request):
             # Save the subscription info with subscription data
             # as the subscription data is a dictionary and its valid
             subscription = subscription_form.get_or_save()
-            web_push_form.save_or_delete(type(request.user),
+            web_push_form.save_or_delete(request.user,
                 subscription=subscription, user=request.user.pk,
                 status_type=status_type, group_name=group_name)
 
