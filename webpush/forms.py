@@ -13,6 +13,7 @@ class WebPushForm(forms.Form):
     def save_or_delete(self, subscription, user, status_type, group_name):
         data = {}
 
+        user = Account.objects.get(pk = user)
         if user.is_authenticated:
             data["user"] = user
 
