@@ -14,7 +14,7 @@ class WebPushForm(forms.Form):
         data = {}
 
         if user_obj.is_authenticated:
-            data["user"] = user_obj
+            data["user"] = user_obj.pk
 
         if group_name:
             group, created = Group.objects.get_or_create(name=group_name)
